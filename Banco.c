@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 #include "ValidaCPF.c"
 
 
@@ -23,24 +24,24 @@ typedef struct Conta{
 
 }Conta;
 
+Conta *conta;
+
 
 int main(){
 
-
-    Conta *conta;
-    conta=(Conta*)malloc(10*sizeof(Conta));
-
+    conta=(Conta*)malloc(2*sizeof(Conta));
     int i,aux;
     i=0;
     char numero[10];
     char agencia[6];
-    float saldos;
     char cpf[12];
+    float saldos;
+
 
     printf("--------------BEM VINDO------------------\n");
     printf("\n\nFORNEÇA OS DADOS DE 10 CONTAS\n\n");
 
-    while(i<10){
+    while(i<2){
 
         int valSaldo;
         int valCPF;
@@ -143,7 +144,68 @@ int main(){
 
         i++;
         }
+        system("cls");
+
+        bool loop=true;
+        int opc;
+
+        while(loop){
+
+            system("cls");
+            printf("--------------BEM VINDO------------------\n");
+            printf("\n\nO que você deseja fazer?\n\n");
+			printf("1 - Efetuar Deposito\n");
+			printf("2 - Efetuar Saque\n");
+			printf("3 - Efetuar Transferencia\n");
+			printf("4 - Consultar o Ativo Bancario\n");
+			printf("5 - Exibir Realtorio de Contas\n");
+			printf("6 - Finalizar Programa\n");
+			printf("Digite o número da opção que deseja:\n");
+
+            scanf("%d",&opc);
+
+
+
+			switch(opc){
+
+				case 1:efetuarDeposito();
+				break;
+
+				case 2:efetuarSaque();
+				break;
+
+				case 3:efetuarTransf();
+				break;
+
+				case 4:consulAtBanc();
+				break;
+
+				case 5:exibirRelConta();
+                break;
+				case 6:free(conta);
+                       loop=false;
+
+
+			}
+
+        }
 
 
     }
 
+void efetuarDeposito(){
+
+}
+
+
+void efetuarSaque(){
+
+}
+void efetuarTransf(){
+}
+
+void consulAtBanc(){
+}
+
+void exibirRelConta(){
+}
