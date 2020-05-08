@@ -24,12 +24,14 @@ typedef struct Conta{
 
 }Conta;
 
+void efetuarDeposito(char numero[10],char agencia[6],float valor);
+void efetuarSaque(char numero[10],char agencia[6],float valor );
+void efetuarTransf(char numero[10],char agencia[6],char numeroDestino[10],char agenciaDestino[6],float valor);
 Conta *conta;
-
 
 int main(){
 
-    conta=(Conta*)malloc(2*sizeof(Conta));
+    conta=(Conta*)malloc(10*sizeof(Conta));
     int i,aux;
     i=0;
     char numero[10];
@@ -41,7 +43,7 @@ int main(){
     printf("--------------BEM VINDO------------------\n");
     printf("\n\nFORNEÇA OS DADOS DE 10 CONTAS\n\n");
 
-    while(i<2){
+    while(i<10){
 
         int valSaldo;
         int valCPF;
@@ -148,7 +150,9 @@ int main(){
 
         bool loop=true;
         int opc;
-
+        float valor;
+        char numeroDestino[10];
+        char agenciaDestino[6];
         while(loop){
 
             system("cls");
@@ -163,18 +167,66 @@ int main(){
 			printf("Digite o número da opção que deseja:\n");
 
             scanf("%d",&opc);
-
+            fflush(stdin);
 
 
 			switch(opc){
 
-				case 1:efetuarDeposito();
+				case 1:
+                    printf("\n\n---------DEPOSITO-----------\n\n");
+				    printf("\nDigite o numero da conta na qual deseja fazer o deposito\n");
+                    gets(numero);
+                    fflush(stdin);
+
+                    printf("\nDigite a agencia da conta na qual deseja fazer o deposito\n");
+                    gets(agencia);
+                    fflush(stdin);
+
+                    printf("\nDigite o valor que quer depositar\n");
+                    scanf("%f",&valor);
+                    fflush(stdin);
+				    efetuarDeposito(numero,agencia,valor);
 				break;
 
-				case 2:efetuarSaque();
+				case 2:
+
+				    printf("\n\n---------SAQUE-----------\n\n");
+				    printf("\nDigite o numero da conta na qual deseja fazer o saque\n");
+                    gets(numero);
+                    fflush(stdin);
+
+                    printf("\nDigite a agencia da conta na qual deseja fazer o saque\n");
+                    gets(agencia);
+                    fflush(stdin);
+
+                    printf("\nDigite o valor que quer sacar\n");
+                    scanf("%f",&valor);
+                    fflush(stdin);
+				    efetuarSaque(numero,agencia,valor);
 				break;
 
-				case 3:efetuarTransf();
+				case 3:
+				    printf("\n\n---------TRANSFERENCIA-----------\n\n");
+				    printf("\nDigite o numero da conta de origem\n");
+                    gets(numero);
+                    fflush(stdin);
+
+                    printf("\nDigite a agencia da conta de origem\n");
+                    gets(agencia);
+                    fflush(stdin);
+
+                    printf("\nDigite o valor que quer transferir\n");
+                    scanf("%f",&valor);
+                    fflush(stdin);
+
+				    printf("\nDigite o numero da conta de destino\n");
+                    gets(numeroDestino);
+                    fflush(stdin);
+
+                    printf("\nDigite a agencia da conta de destino\n");
+                    gets(agenciaDestino);
+                    fflush(stdin);
+				    efetuarTransf(numero,agencia,numeroDestino,agenciaDestino,valor);
 				break;
 
 				case 4:consulAtBanc();
@@ -193,19 +245,220 @@ int main(){
 
     }
 
-void efetuarDeposito(){
+void efetuarDeposito(char numero[10],char agencia[6],float valor){
 
+    int i;
+    bool loop=true;
+
+
+
+    while(loop){
+
+        if(valor<0){
+
+            printf("\nValor de depósito inválido. Deve ser positivo.\n");
+            printf("\nDigite um novo valor.\n");
+            scanf("%f",&valor);
+            fflush(stdin);
+
+        }else{
+
+            int veriNumCon=1;
+            for(i=0;i<10;i++){
+
+                if((strcmp(conta[i].numero,numero)==0)&&(strcmp(conta[i].agencia,agencia)==0)){
+
+                    conta[i].saldo+=valor;
+                    printf("\nDeposito efetuado com sucesso\n");
+                    getchar();
+                    veriNumCon=1;
+                    break;
+
+                }else{
+
+                    veriNumCon=0;
+
+                }
+
+            }
+            if(veriNumCon==0){
+                printf("Conta não encontrada");
+                getchar();
+            }
+            loop=false;
+
+        }
+
+    }
 }
 
+void efetuarSaque(char numero[10],char agencia[6],float valor ){
 
-void efetuarSaque(){
+    int i;
+    bool loop=true;
+
+
+
+    while(loop){
+
+        if(valor<0){
+
+            printf("\nValor de saque inválido.Deve ser positivo.\n");
+            printf("\nDigite um novo valor.\n");
+            scanf("%f",&valor);
+            fflush(stdin);
+
+        }else{
+
+            int veriNumCon=1;
+            for(i=0;i<10;i++){
+
+                if((strcmp(conta[i].numero,numero)==0)&&(strcmp(conta[i].agencia,agencia)==0)){
+
+                    if(conta[i].saldo<valor){
+                       printf("\nSaldo insuficiente para saque\n");
+                       getchar();
+                       veriNumCon=1;
+                       break;
+                    }else{
+                        conta[i].saldo-=valor;
+                        printf("\nSaque efetuado com sucesso\n");
+                        getchar();
+                        veriNumCon=1;
+                        break;
+                    }
+                }else{
+
+                    veriNumCon=0;
+
+                }
+
+            }
+            if(veriNumCon==0){
+
+                printf("Conta não encontrada");
+                getchar();
+
+            }
+            loop=false;
+
+        }
+
+    }
+
 
 }
-void efetuarTransf(){
+void efetuarTransf(char numero[10],char agencia[6],char numeroDestino[10],char agenciaDestino[6],float valor){
+
+    int i;
+    int j;
+    bool loop=true;
+
+
+
+    while(loop){
+
+        if(valor<0){
+
+            printf("\nValor de tranferencia inválido.Deve ser positivo.\n");
+            printf("\nDigite um novo valor.\n");
+            scanf("%f",&valor);
+            fflush(stdin);
+
+        }else{
+
+            int veriNumCon=1;
+            for(i=0;i<10;i++){
+
+                if((strcmp(conta[i].numero,numero)==0)&&(strcmp(conta[i].agencia,agencia)==0)){
+
+                    if(conta[i].saldo<valor){
+                       printf("\nSaldo insuficiente para transferencia\n");
+                       getchar();
+                       veriNumCon=1;
+                       break;
+                    }else{
+
+
+                         int veriNumConDes;
+                         for(j=0;j<10;j++){
+
+                                if((strcmp(conta[j].numero,numeroDestino)==0)&&(strcmp(conta[j].agencia,agenciaDestino)==0)){
+                                    conta[j].saldo+=valor;
+                                    conta[i].saldo-=valor;
+                                    printf("\nTransferencia efetuada com sucesso\n");
+                                    getchar();
+                                    veriNumConDes=1;
+                                    break;
+                                }else{
+                                    veriNumConDes=0;
+
+                                }
+
+                         }
+
+                         if(veriNumConDes==0){
+
+                            printf("Conta de destino não encontrada");
+                            getchar();
+                         }
+
+                         loop=false;
+                         break;
+                    }
+                }else{
+
+                    veriNumCon=0;
+
+                }
+
+            }
+            if(veriNumCon==0){
+
+                printf("Conta de origem não encontrada");
+                getchar();
+
+            }
+            loop=false;
+
+
+        }
+
+    }
 }
 
 void consulAtBanc(){
+
+     int i;
+     float valorTotal;
+
+     for(i=0;i<10;i++){
+
+       valorTotal+=conta[i].saldo;
+
+
+     }
+
+     printf("O valor do ativo bancario é %.2f",valorTotal);
+     getchar();
+
 }
 
 void exibirRelConta(){
+
+    int i;
+    for(i=0;i<10;i++){
+
+        printf("\n\n------------CONTA %d-------------\n\n",i+1);
+        printf("Numero: %s\n",conta[i].numero);
+        printf("Agencia: %s\n",conta[i].agencia);
+        printf("Saldo: %.2f\n",conta[i].saldo);
+        printf("CPF: %s\n",conta[i].cliente.cpf);
+        printf("Nome: %s\n",conta[i].cliente.nome);
+        printf("Data de nascimento: %s\n",conta[i].cliente.dataNasc);
+
+     }
+
+     getchar();
 }
+
